@@ -5,19 +5,6 @@ import { useCallback, useEffect, useState } from "react";
 import { Triangle } from "react-loader-spinner";
 import { TransactionState } from "./components/TransactionState";
 
-const USER_DB_KEYS = [
-  "customer_id",
-  "first_name",
-  "middle_name",
-  "last_name",
-  "pincode",
-  "credit_limit",
-  "credit_usage",
-  "credit_score",
-  "balance",
-  "registration_time",
-];
-
 type User = {
   customer_id: string;
   first_name: string;
@@ -86,7 +73,7 @@ export default function Page() {
   });
   const [userTransactions, setUserTransactions] = useState<Transaction[]>([]);
 
-  const loadUserTransactions = () => {
+  const loadUserTransactions = useCallback(() => {
     setTloading(true);
     fetch(`/api/transactions?from_id=${customer_id}`)
       .then((res) => res.json())
@@ -97,7 +84,7 @@ export default function Page() {
         alert("Error Loading transactions " + err.message);
       })
       .finally(() => setTloading(false));
-  };
+  }, [customer_id]);
 
   const getUser = useCallback(() => {
     setLoading(true);
@@ -152,7 +139,7 @@ export default function Page() {
           });
       }
     }
-  }, [transaction, transaction_id]);
+  }, [transaction, transaction_id, loadUserTransactions]);
 
   const pay = useCallback(() => {
     setPloading(false);
@@ -182,15 +169,15 @@ export default function Page() {
         alert("Error " + err.message);
       })
       .finally(() => setPloading(false));
-  }, [selectedUser, customer_id, amount]);
+  }, [selectedUser, customer_id, amount, updateTransaction]);
 
   useEffect(getUser, [getUser]);
   useEffect(() => {
     const timeoutId = setTimeout(updateTransaction, 1000);
     return () => clearTimeout(timeoutId);
-  }, [transaction]);
+  }, [transaction, updateTransaction]);
 
-  useEffect(loadUserTransactions, [customer_id]);
+  useEffect(loadUserTransactions, [loadUserTransactions]);
 
   if (loading) return <h1 className="text-center">Loading...</h1>;
   if (!user)

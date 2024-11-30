@@ -41,7 +41,7 @@ const create_token = () => {
 
 const getTransactionId = () =>  `${create_token()}-${+Date.now()}`;
 
-const getLastUpdate = () => (new Date()).toISOString().replace('T', ' ').split('.')[0];
+const getLastUpdate = () => (new Date()).toISOString().slice(0, 19).replace('T', ' ');
 
 const sleep = (timer: number) => new Promise(res => setTimeout(() => res(0), timer));
 
@@ -56,7 +56,7 @@ const makePayment = (transaction_id	: string, from_id : string, to_id: string, a
       console.log('PENDING TRANSACTIONS', pending);
       if(pending === '1'){
         // now remove money from his account
-        let balance = Number((await sql(`select balance from Customers where customer_id='${from_id}'`))[0].balance);
+        const balance = Number((await sql(`select balance from Customers where customer_id='${from_id}'`))[0].balance);
         if(balance >= amount){
           console.log(`UPDATE transactions SET stat='WITHDRAW_INIT', last_update='${getLastUpdate()}' WHERE transaction_id='${transaction_id}'`);
           await sql(`UPDATE transactions SET stat='WITHDRAW_INIT', last_update='${getLastUpdate()}' WHERE transaction_id='${transaction_id}'`);
