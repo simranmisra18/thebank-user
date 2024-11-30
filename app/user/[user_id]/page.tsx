@@ -324,7 +324,10 @@ export default function Page() {
                             <li key={suggestion.customer_id}>
                               <button
                                 className="w-full h-full px-2 py-1 hover:bg-slate-200 border border-collapse"
-                                onClick={() => setSelectedUser(suggestion)}
+                                onClick={() => {
+                                  setSelectedUser(suggestion);
+                                  setQ("");
+                                }}
                               >
                                 {suggestion.first_name}{" "}
                                 <small className="text-gray-800 font-mono">
@@ -366,7 +369,13 @@ export default function Page() {
                   <p>Note: payment info will auto refresh every second</p>
                 </>
               ) : (
-                <button className="px-2 py-1 border hover:bg-slate-200">
+                <button
+                  className="px-2 py-1 border hover:bg-slate-200"
+                  onClick={() => {
+                    setTransactionId("");
+                    setSelectedUser(null);
+                  }}
+                >
                   Return
                 </button>
               )}
