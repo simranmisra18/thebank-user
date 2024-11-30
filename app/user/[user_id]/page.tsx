@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Triangle } from "react-loader-spinner";
 import { TransactionState } from "./components/TransactionState";
 
-export const USER_DB_KEYS = [
+const USER_DB_KEYS = [
   "customer_id",
   "first_name",
   "middle_name",
