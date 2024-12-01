@@ -1,5 +1,4 @@
 import { Check, Clock } from "lucide-react";
-import { SugUser } from "../types";
 
 const stats = [
   "SENT_FOR_APPROVAL",
