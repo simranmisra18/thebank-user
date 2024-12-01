@@ -8,7 +8,7 @@ export async function GET(req: Request) {
   if(!userid){
     return NextResponse.json({error : true, message: 'invalid params'}, {status : 400});
   }
-  const data = await sql(`SELECT customer_id, first_name, middle_name, last_name, pincode, credit_limit, credit_usage, credit_score, balance, registration_time from Customers where customer_id='${userid}'`);
+  const data = await sql(`SELECT customer_id, first_name, middle_name, last_name, pincode, credit_limit, credit_usage, credit_score, balance, registration_time, branch_id from Customers where customer_id='${userid}'`);
   if(data.length === 0){
     return NextResponse.json({error : true, message: 'userid doesnt exist', userid}, {status : 402});
   }

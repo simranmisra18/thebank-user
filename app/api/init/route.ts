@@ -106,6 +106,14 @@ export async function POST(req: Request) {
     const { from_id, to_id, amount : amountString } = body;
     const amount = Number(amountString);
 
+    const token = req.headers.get('Authorization')?.replace('Bearer ', '');
+    const tokenValidation = await sql`SELECT for_id FROM Token WHERE token_id = ${token}`;
+
+    if (tokenValidation.length === 0 || tokenValidation[0].for_id !== from_id) {
+      return NextResponse.json({ error: true, message: 'Invalid token' }, { status: 403 });
+    }
+  
+
     // Validate required fields
     if (!from_id || !to_id || !amount) {
       return new Response(

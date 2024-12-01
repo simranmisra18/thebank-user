@@ -68,7 +68,7 @@ export async function GET(req: Request) {
   const token = create_token();
   try{
     await sql("DELETE FROM Token WHERE for_id=$1", [customer_id]);
-    await sql("INSERT INTO Token VALUES ($1, $2, $3)", [token, customer_id, true]);
+    await sql("INSERT INTO Token VALUES ($1, $2, $3)", [token, customer_id, false]);
     return NextResponse.json({
       data : user,
       token,
