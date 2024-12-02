@@ -30,7 +30,7 @@ export default function Home() {
         }
       })
       .catch((err) => {
-        console.log("ERROR", { err });
+        alert(err.message);
       })
       .finally(() => {
         setLoading(false);
@@ -38,7 +38,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col h-[100vh] bg-slate-100 justify-center items-center">
+    <div className="flex flex-col h-[100vh] bg-slate-100 justify-center items-center" suppressHydrationWarning={true}>
       <form
         className="p-8 m-4 bg-white flex flex-col w-4/5 sm:w-1/2 justify-center items-center rounded-lg"
         onSubmit={onSubmit}

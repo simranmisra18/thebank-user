@@ -77,7 +77,6 @@ export default function Page() {
   }, [customer_id]);
 
   const updateTransaction = useCallback(() => {
-    console.log("CALLED UPDATE TRANSACTION");
     if (transaction_id) {
       if (transaction.stat !== "COMPLETE" && transaction.stat !== "FAILED") {
         fetch(`/api/transaction?transaction_id=${transaction_id}`, {
@@ -200,15 +199,15 @@ export default function Page() {
           </div>
           {view === "PR" ? (
             <div className="p-8 m-4 bg-white flex flex-col w-4/5 sm:w-1/2 justify-center items-center rounded-lg">
-              <h3 className="text-2xl mb-4">
+              <h2 className="text-2xl mb-4">
                 Current balance: <strong>{user.balance}</strong>
-              </h3>
-              <h4 className="text-large">
+              </h2>
+              <p className="text-large">
                 Your registered branch id : <strong>{user.branch_id}</strong>
-              </h4>
-              <h4 className="text-large">
+              </p>
+              <p className="text-large">
                 Your Credit Score : <strong>{user.credit_score}</strong>
-              </h4>
+              </p>
             </div>
           ) : null}
           {view === "RT" ? (
