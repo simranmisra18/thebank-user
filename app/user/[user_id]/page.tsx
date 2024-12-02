@@ -6,6 +6,7 @@ import { UserTransactions } from "./components/UserTransactions";
 import type { Transaction as TransactionType, SugUser } from "./types";
 import { Transaction } from "./components/Transaction";
 import { DIV_CLASSNAME } from "./constants";
+import { TrackTransaction } from "./components/TrackTransaction";
 
 type User = {
   customer_id: string;
@@ -142,7 +143,7 @@ export default function Page() {
 
   useEffect(loadUserTransactions, [loadUserTransactions]);
 
-  const [view, setView] = useState<"PR" | "RT" | "PY">("PR");
+  const [view, setView] = useState<"PR" | "RT" | "PY" | "TT">("PR");
 
   if (loading) return <h1 className="text-center">Loading...</h1>;
   if (!user)
@@ -187,6 +188,14 @@ export default function Page() {
               >
                 Make Payment
               </button>
+              <button
+                className={`px-4 py-2 border hover:bg-slate-200 rounded-md ${
+                  view === "TT" ? "bg-slate-300" : ""
+                }`}
+                onClick={() => setView("TT")}
+              >
+                Track Transaction
+              </button>
             </div>
           </div>
           {view === "PR" ? (
@@ -225,6 +234,7 @@ export default function Page() {
               }}
             />
           ) : null}
+          {view === "TT" ? <TrackTransaction /> : null}
         </>
       )}
     </div>
