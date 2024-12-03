@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { UserTransactions } from "./components/UserTransactions";
 import type { Transaction as TransactionType, SugUser } from "./types";
@@ -22,6 +22,8 @@ export default function Page() {
   const { user_id: customer_id } = useParams<{
     user_id: string;
   }>();
+
+  const router = useRouter();
 
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);
@@ -49,13 +51,17 @@ export default function Page() {
     })
       .then((res) => res.json())
       .then((res) => {
+        if (res.error) {
+          alert("You have been logged out");
+          router.push("/");
+        }
         setUserTransactions(res);
       })
       .catch((err) => {
         alert("Error Loading transactions " + err.message);
       })
       .finally(() => setTloading(false));
-  }, [customer_id]);
+  }, [customer_id, router]);
 
   const getUser = useCallback(() => {
     setLoading(true);
@@ -68,13 +74,18 @@ export default function Page() {
     })
       .then((res) => res.json())
       .then((res) => {
+        if (res.error) {
+          alert("You have been logged out");
+          router.push("/");
+        }
+
         setUser(res);
       })
       .catch((err) => {
         alert("Error " + err.message);
       })
       .finally(() => setLoading(false));
-  }, [customer_id]);
+  }, [customer_id, router]);
 
   const updateTransaction = useCallback(() => {
     if (transaction_id) {
@@ -88,6 +99,11 @@ export default function Page() {
         })
           .then((res) => res.json())
           .then((res) => {
+            if (res.error) {
+              alert("You have been logged out");
+              router.push("/");
+            }
+
             if (res.stat === "COMPLETE" || res.stat === "FAILED") {
               loadUserTransactions();
             }
@@ -98,7 +114,7 @@ export default function Page() {
           });
       }
     }
-  }, [transaction, transaction_id, loadUserTransactions]);
+  }, [transaction, transaction_id, loadUserTransactions, router]);
 
   const pay = useCallback(() => {
     setPloading(false);
@@ -117,6 +133,11 @@ export default function Page() {
       .then((res) => res.json())
       .then((res) => {
         if (res.error) {
+          alert("You have been logged out");
+          router.push("/");
+        }
+
+        if (res.error) {
           alert("ERROR " + res.error);
         } else {
           // transaction successful
@@ -132,7 +153,7 @@ export default function Page() {
         alert("Error " + err.message);
       })
       .finally(() => setPloading(false));
-  }, [selectedUser, customer_id, amount, updateTransaction]);
+  }, [selectedUser, customer_id, amount, updateTransaction, router]);
 
   useEffect(getUser, [getUser]);
   useEffect(() => {
